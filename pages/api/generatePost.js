@@ -1,6 +1,19 @@
+import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0"
 import { Configuration, OpenAIApi } from "openai"
+import clientPromise from "../../lib/mongodb"
 
-export default async function handler(req, res) {
+export default withApiAuthRequired(async function handler(req, res) {
+  const { user } = await getSession(req, res)
+  const client = await clientPromise
+  const db = client.db("BlogGenerator")
+  const userProfile = await db.collection("users").findOne({
+    auth0Id: user.sub,
+  })
+  if (!userProfile?.availableTokens) {
+    res.status(403)
+    return
+  }
+
   const config = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
   })
@@ -32,9 +45,7 @@ export default async function handler(req, res) {
       },
       {
         role: "user",
-        content: `Write a long and detailed SEO-friendly blog post ${topic}, that targets the following comma-separated keywords: ${keywords}.
-          The contented should be formatted in SEO-friendly HTML, 
-          limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
+        content: `Write a long and detailed SEO-friendly blog post about ${topic}, that targets the following comma-separated keywords: ${keywords}. The content should be formatted in SEO-friendly HTML, limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
       },
     ],
   })
@@ -52,9 +63,7 @@ export default async function handler(req, res) {
       },
       {
         role: "user",
-        content: `Write a long and detailed SEO-friendly blog post ${topic}, that targets the following comma-separated keywords: ${keywords}.
-          The contented should be formatted in SEO-friendly HTML, 
-          limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
+        content: `Write a long and detailed SEO-friendly blog post about ${topic}, that targets the following comma-separated keywords: ${keywords}. The content should be formatted in SEO-friendly HTML, limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
       },
       {
         role: "assistant",
@@ -77,9 +86,7 @@ export default async function handler(req, res) {
       },
       {
         role: "user",
-        content: `Write a long and detailed SEO-friendly blog post ${topic}, that targets the following comma-separated keywords: ${keywords}.
-          The contented should be formatted in SEO-friendly HTML, 
-          limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
+        content: `Write a long and detailed SEO-friendly blog post about ${topic}, that targets the following comma-separated keywords: ${keywords}. The content should be formatted in SEO-friendly HTML, limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
       },
       {
         role: "assistant",
@@ -98,9 +105,30 @@ export default async function handler(req, res) {
   const metaDescription =
     metaDescriptionResponse.data.choices[0]?.message?.content || ""
 
-  console.log("POST CONTENT: ", postContent)
-  console.log("TITLE: ", title)
-  console.log("META DESCRIPTION: ", metaDescription)
+  // console.log("POST CONTENT: ", postContent)
+  // console.log("TITLE: ", title)
+  // console.log("META DESCRIPTION: ", metaDescription)
+
+  await db.collection("users").updateOne(
+    {
+      auth0Id: user.sub,
+    },
+    {
+      $inc: {
+        availableTokens: -1,
+      },
+    }
+  )
+
+  const post = await db.collection("posts").insertOne({
+    postContent,
+    title,
+    metaDescription,
+    topic,
+    keywords,
+    userId: userProfile._id,
+    created: new Date(),
+  })
 
   res.status(200).json({
     post: {
@@ -112,4 +140,4 @@ export default async function handler(req, res) {
   // res.status(200).json({
   //   post: JSON.parse(response.data.choices[0]?.text.split("\n").join("")),
   // })
-}
+})
