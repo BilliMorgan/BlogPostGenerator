@@ -1,10 +1,11 @@
-// import { getSession, withPageAuthRequired } from "@auth0/nextjs-auth0"
-// import { AppLayout } from "../../components/AppLayout"
+import { getSession, withPageAuthRequired } from "@auth0/nextjs-auth0"
+
+import { AppLayout } from "../../components/AppLayout"
 // import clientPromise from "../../lib/mongodb"
 // import { ObjectId } from "mongodb"
 
-export default function Post() {
-  // console.log("PROPS: ", props)
+export default function Post(props) {
+  console.log("PROPS: ", props)
   return (
     <div>
       <h1>this is post page</h1>
@@ -12,19 +13,25 @@ export default function Post() {
   )
 }
 
-// Post.getLayout = function getLayout(page, pageProps) {
-//   return <AppLayout {...pageProps}>{page}</AppLayout>
-// }
+Post.getLayout = function getLayout(page, pageProps) {
+  return <AppLayout {...pageProps}>{page}</AppLayout>
+}
+export const getServerSideProps = withPageAuthRequired(() => {
+  return {
+    props: {},
+  }
+})
 
-// export const getServerSideProps = withPageAuthRequired(
-//   () => {
-//     return {
-//       props: {},
-//     }
+// export const getServerSideProps =
+//   withPageAuthRequired()
+// () => {
+//   return {
+//     props: {},
 //   }
+// }
 // {
 // async getServerSideProps(ctx) {
-//   const userSession = await getSession(ctx.res, ctx.req)
+//   const userSession = await getSession(ctx.req, ctx.res, )
 //   const client = await clientPromise
 //   const db = client.db("BlogGenerator")
 //   const user = await db.collection("users").findOne({
@@ -52,4 +59,3 @@ export default function Post() {
 //   }
 // },
 // }
-// )
