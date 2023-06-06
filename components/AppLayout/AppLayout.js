@@ -4,10 +4,22 @@ import { useUser } from "@auth0/nextjs-auth0/client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCoins } from "@fortawesome/free-solid-svg-icons"
 import { Logo } from "../Logo"
+import { useContext, useEffect } from "react"
+import PostsContext from "../../context/postsContext"
 
-export const AppLayout = ({ children, availableTokens, posts, postId }) => {
+export const AppLayout = ({
+  children,
+  availableTokens,
+  posts: postsFromSSR,
+  postId,
+}) => {
   const { user } = useUser()
-  // console.log("APP PROPS: ", rest)
+  const { setPostsFromSSR, posts } = useContext(PostsContext)
+
+  useEffect(() => {
+    setPostsFromSSR(postsFromSSR)
+  }, [postsFromSSR, setPostsFromSSR])
+
   return (
     <div className="grid grid-cols-[300px_1fr] h-screen max-h-screen">
       <div className="flex flex-col text-white overflow-hidden">
@@ -33,6 +45,9 @@ export const AppLayout = ({ children, availableTokens, posts, postId }) => {
               {post.topic}
             </Link>
           ))}
+          <div className="hover:underline text-sm text-slate-400 text-center cursor-pointer mt-4">
+            Load more posts
+          </div>
         </div>
         <div className="bg-cyan-800 flex items-center gap-2 border-t border-t-black/50 h-20 px-2">
           {!!user ? (
