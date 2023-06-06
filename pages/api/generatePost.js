@@ -34,7 +34,7 @@ export default withApiAuthRequired(async function handler(req, res) {
       },
     ],
   })
-
+  console.log(postContentResponse)
   const postContent =
     postContentResponse.data.choices[0]?.message?.content || ""
 
@@ -116,6 +116,7 @@ export default withApiAuthRequired(async function handler(req, res) {
   })
 
   console.log("POST: ", post)
+
   res.status(200).json({
     postId: post.insertedId,
   })
