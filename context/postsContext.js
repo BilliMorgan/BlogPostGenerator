@@ -1,25 +1,53 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useReducer, useState } from "react"
 
 const PostsContext = React.createContext({})
 
 export default PostsContext
 
-export const PostsProvider = ({ children }) => {
-  const [posts, setPosts] = useState([])
-  const [noMorePosts, setNoMorePosts] = useState(false)
+const ADDPOSTS = "addPosts"
+const DELETEPOSTS = "deletePosts"
 
-  const setPostsFromSSR = useCallback((postsFromSSR = []) => {
-    console.log("Posts from SSR", postsFromSSR)
-
-    setPosts((value) => {
-      const newPosts = [...value]
-      postsFromSSR.forEach((post) => {
+function postsReducer(state, action) {
+  switch (action.type) {
+    case ADDPOSTS: {
+      const newPosts = [...state]
+      action.posts.forEach((post) => {
         const postExists = newPosts.find((pst) => pst._id === post._id)
         if (!postExists) {
           newPosts.push(post)
         }
       })
       return newPosts
+    }
+    case DELETEPOSTS: {
+      const newPosts = []
+      state.forEach((post) => {
+        if (post._id !== action.postId) {
+          newPosts.push(post)
+        }
+      })
+      return newPosts
+    }
+    default:
+      return state
+  }
+}
+
+export const PostsProvider = ({ children }) => {
+  const [posts, dispatch] = useReducer(postsReducer, [])
+  const [noMorePosts, setNoMorePosts] = useState(false)
+
+  const deletePost = useCallback((postId) => {
+    dispatch({
+      type: DELETEPOSTS,
+      postId,
+    })
+  }, [])
+
+  const setPostsFromSSR = useCallback((postsFromSSR = []) => {
+    dispatch({
+      type: ADDPOSTS,
+      posts: postsFromSSR,
     })
   }, [])
 
@@ -38,15 +66,9 @@ export const PostsProvider = ({ children }) => {
       if (postResult.length < 5) {
         setNoMorePosts(true)
       }
-      setPosts((value) => {
-        const newPosts = [...value]
-        postResult.forEach((post) => {
-          const postExists = newPosts.find((pst) => pst._id === post._id)
-          if (!postExists) {
-            newPosts.push(post)
-          }
-        })
-        return newPosts
+      dispatch({
+        type: ADDPOSTS,
+        posts: postResult,
       })
     },
     []
@@ -54,7 +76,7 @@ export const PostsProvider = ({ children }) => {
 
   return (
     <PostsContext.Provider
-      value={{ posts, setPostsFromSSR, getPosts, noMorePosts }}
+      value={{ posts, setPostsFromSSR, getPosts, noMorePosts, deletePost }}
     >
       {children}
     </PostsContext.Provider>

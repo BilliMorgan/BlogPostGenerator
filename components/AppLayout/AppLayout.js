@@ -15,13 +15,13 @@ export const AppLayout = ({
   postCreated,
 }) => {
   const { user } = useUser()
-  const { setPostsFromSSR, posts, getPosts, noMorePosts } =
+  const { posts, setPostsFromSSR, getPosts, noMorePosts } =
     useContext(PostsContext)
 
   useEffect(() => {
     setPostsFromSSR(postsFromSSR)
     if (postId) {
-      const exists = postsFromSSR.find((post) => postsFromSSR._id === postId)
+      const exists = postsFromSSR.find((post) => post._id === postId)
       if (!exists) {
         getPosts({ getNewerPosts: true, lastPostDate: postCreated })
       }
