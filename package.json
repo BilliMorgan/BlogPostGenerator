@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": "16.x"
+  },
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.2.1",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
