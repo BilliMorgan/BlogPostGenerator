@@ -39,11 +39,11 @@ export default withApiAuthRequired(async function handler(req, res) {
       },
       {
         role: "user",
-        content: `Write a long and detailed SEO-friendly blog post about ${topic}, that targets the following comma-separated keywords: ${keywords}. The content should be formatted in SEO-friendly HTML, limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
+        content: `Write a long and detailed SEO-friendly blog post about ${topic}, that targets the following comma-separated keywords: ${keywords}. Your response must be formatted as SEO-friendly HTML, limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
       },
     ],
   })
-  console.log(postContentResponse)
+
   const postContent =
     postContentResponse.data.choices[0]?.message?.content || ""
 
@@ -99,10 +99,6 @@ export default withApiAuthRequired(async function handler(req, res) {
   const metaDescription =
     metaDescriptionResponse.data.choices[0]?.message?.content || ""
 
-  // console.log("POST CONTENT: ", postContent)
-  // console.log("TITLE: ", title)
-  // console.log("META DESCRIPTION: ", metaDescription)
-
   await db.collection("users").updateOne(
     {
       auth0Id: user.sub,
@@ -123,8 +119,6 @@ export default withApiAuthRequired(async function handler(req, res) {
     userId: userProfile._id,
     created: new Date(),
   })
-
-  console.log("POST: ", post)
 
   res.status(200).json({
     postId: post.insertedId,

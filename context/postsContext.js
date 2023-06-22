@@ -36,6 +36,7 @@ function postsReducer(state, action) {
 export const PostsProvider = ({ children }) => {
   const [posts, dispatch] = useReducer(postsReducer, [])
   const [noMorePosts, setNoMorePosts] = useState(false)
+  console.log("NO MORE POSTS", noMorePosts)
 
   const deletePost = useCallback((postId) => {
     dispatch({
@@ -62,7 +63,8 @@ export const PostsProvider = ({ children }) => {
       })
       const json = await result.json()
       const postResult = json.posts || []
-      console.log("POSTS RESULT: ", postResult)
+      console.log("POST RESULT", postResult.length)
+
       if (postResult.length < 5) {
         setNoMorePosts(true)
       }

@@ -11,7 +11,6 @@ import { useRouter } from "next/router"
 import PostsContext from "../../context/postsContext"
 
 export default function Post(props) {
-  console.log("PROPS: ", props)
   const router = useRouter()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const { deletePost } = useContext(PostsContext)
@@ -31,7 +30,7 @@ export default function Post(props) {
         router.replace(`/post/new`)
       }
     } catch (error) {
-      console.log("DELETE POST ERROR", error)
+      console.error("DELETE POST ERROR", error)
     }
   }
   return (
@@ -49,7 +48,7 @@ export default function Post(props) {
         </div>
         <div className="flex flex-wrap pt-2 gap-1">
           {props.keywords.split(",").map((keyword, i) => (
-            <div className="p-2 rounded-full bg-slate-600 text-white" key={i}>
+            <div className="p-2 rounded-full bg-slate-800 text-white" key={i}>
               <FontAwesomeIcon icon={faHashtag} />
               {keyword}
             </div>
@@ -59,7 +58,7 @@ export default function Post(props) {
           Blog post
         </div>
         <div dangerouslySetInnerHTML={{ __html: props.postContent || "" }} />
-        <div className="mt-4">
+        <div className="mt-4 mb-12">
           {!showDeleteConfirm && (
             <button
               className="btn bg-red-600 hover:bg-red-700"

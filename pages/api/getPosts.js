@@ -1,7 +1,7 @@
 import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0"
 import clientPromise from "../../lib/mongodb"
 
-export default withApiAuthRequired(async function hadler(req, res) {
+export default withApiAuthRequired(async function handler(req, res) {
   try {
     const {
       user: { sub },
@@ -12,6 +12,7 @@ export default withApiAuthRequired(async function hadler(req, res) {
       auth0Id: sub,
     })
     const { lastPostDate, getNewerPosts } = req.body
+
     const posts = await db
       .collection("posts")
       .find({
@@ -25,6 +26,6 @@ export default withApiAuthRequired(async function hadler(req, res) {
     res.status(200).json({ posts })
     return
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 })
