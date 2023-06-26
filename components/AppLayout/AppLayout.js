@@ -1,3 +1,4 @@
+import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useUser } from "@auth0/nextjs-auth0/client"
@@ -6,6 +7,7 @@ import { faCoins } from "@fortawesome/free-solid-svg-icons"
 import { Logo } from "../Logo"
 import { useContext, useEffect } from "react"
 import PostsContext from "../../context/postsContext"
+import { Menu } from "../Menu"
 
 export const AppLayout = ({
   children,
@@ -17,6 +19,11 @@ export const AppLayout = ({
   const { user } = useUser()
   const { posts, setPostsFromSSR, getPosts, noMorePosts } =
     useContext(PostsContext)
+  const [isHidden, setIsHidden] = useState(false)
+
+  const onMenu = () => {
+    setIsHidden(!isHidden)
+  }
 
   useEffect(() => {
     setPostsFromSSR(postsFromSSR)
@@ -29,8 +36,17 @@ export const AppLayout = ({
   }, [postsFromSSR, setPostsFromSSR, postId, postCreated, getPosts])
 
   return (
-    <div className="grid grid-cols-[300px_1fr] h-screen max-h-screen">
-      <div className="flex flex-col text-white overflow-hidden">
+    <div
+      className={`${
+        !isHidden && "md:grid grid-cols-[300px_1fr]"
+      } relative  h-screen max-h-screen`}
+    >
+      <Menu clicked={onMenu} />
+      <div
+        className={`${
+          isHidden && "hidden"
+        } flex flex-col text-white overflow-hidden `}
+      >
         <div className="bg-slate-800 px-2">
           <Logo />
           <Link className="btn" href="/post/new">

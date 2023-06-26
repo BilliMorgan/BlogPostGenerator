@@ -6,9 +6,9 @@ import Image from "next/image"
 export default function Home() {
   return (
     <div>
-      <div className=" h-full bg-gradient-to-b from-slate-800 to-cyan-800 flex flex-wrap text-white w-full ">
-        <div className="flex flex-col items-center justify-center p-10  h-screen w-2/3">
-          <h1 className="text-5xl md:text-7xl font-bold">
+      <div className=" min-h-screen bg-gradient-to-b from-slate-800 to-cyan-800 flex flex-wrap text-white w-full ">
+        <div className="flex flex-col items-center justify-center p-10  h-screen w-full md:w-2/3">
+          <h1 className="text-4xl md:text-6xl font-bold">
             AI-Powered Blog Post Generator for Effortless Content Creation
           </h1>
           <Link className="btn w-40 self-start mt-10" href="/post/new">

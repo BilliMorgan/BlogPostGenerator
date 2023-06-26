@@ -38,20 +38,20 @@ export default function NewPost(props) {
     }
   }
   return (
-    <div className="h-full overflow-hidden">
+    <div className="h-full overflow-auto">
       {!!isLoading && (
         <div className="text-green-500 flex h-full animate-pulse w-full flex-col justify-center items-center">
           <FontAwesomeIcon className="text-8xl" icon={faBrain} />
-          <h6>
+          <h6 className="text-center">
             Information is generated. <br />
             It would take some time to display formatted data.
           </h6>
         </div>
       )}
       {!isLoading && (
-        <div className="w-full h-full flex flex-col overflow-auto">
+        <div className="w-full h-full md:flex flex-col overflow-auto">
           <form
-            className="m-auto w-full max-w-screen-sm bg-slate-100 p-4 rounded-md shadow-xl border border-slate-200 shadow-slate-200"
+            className="mt-14 md:m-auto w-full max-w-screen-sm bg-slate-100 p-4 rounded-md shadow-xl border border-slate-200 shadow-slate-200 "
             onSubmit={handleSubmit}
           >
             <div>
