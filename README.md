@@ -1,34 +1,53 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Blogify
+
+Deployed version is here [Blogify](https://hammerhead-app-sgxva.ondigitalocean.app).
+
+Application hosted on the Digital Ocean. Due to long inactivity, the app could be halted.
+
+# SEO-Optimized Content Generator
+
+This prototype project is a web application built with React, Next.js, and Tailwind CSS. It leverages the power of the OpenAI API, Stripe API, MongoDB/Atlas, and Auth0 to create an SEO-optimized content for specific topics.
+
+## Features
+
+- **AI-Powered Content Generation**: The application utilizes the OpenAI API to generate high-quality content for a given topic. It suggests attention-grabbing titles, provides short descriptions, by using relevant keywords.
+
+- **SEO Optimization**: The content generator ensures that the generated content is optimized for search engine rankings. It assists in incorporating relevant keywords and follows SEO best practices to improve your content's discoverability.
+
+- **Integration with Stripe API**: To access the full range of features, users are required to purchase tokens through the integrated Stripe payment system. This allows you to monetize the application and provide a seamless payment experience for your users.
+
+- **Secure User Authentication with Auth0**: The application implements Auth0 for secure and customizable user authentication. It protects your content and enables you to manage user access effectively.
+
+- **Storage and Management with MongoDB/Atlas**: The application securely stores and manages the generated content in a reliable MongoDB/Atlas database. This ensures efficient retrieval and organization of your content for future reference.
 
 ## Getting Started
 
-First, run the development server:
+To run the application locally, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+1. Clone the repository: `git clone <repository-url>`
+2. Install the dependencies: `npm install`
+3. Set up the required API keys and configurations:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+   - OpenAI API: Obtain an API key from OpenAI and update the configuration file.
+   - Stripe API: Set up a Stripe account, obtain the required API keys, and update the configuration file.
+   - MongoDB/Atlas: Set up a MongoDB/Atlas account, create a database, and update the configuration file with the connection details.
+   - Auth0: Create an Auth0 account, set up an application, and configure the required authentication settings.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+4. Start the development server: `npm run dev`
+5. Open the application in your browser: `http://localhost:3000`
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Usage
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+1. Sign in to the application using your Auth0 credentials.
+2. Enter a topic for which you want to generate SEO-optimized content.
+3. Enter keywords separated by coma.
+4. Click the "Generate" button to generate the SEO-optimized content.
+5. Review the suggested title, short description provided by the application.
 
-## Learn More
+## Limitations
 
-To learn more about Next.js, take a look at the following resources:
+- This project is a prototype developed to showcase the capabilities of React, Next.js, Tailwind CSS, and the integrated APIs. It may not have the full range of features and scalability of a production-ready application.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- The accuracy and effectiveness of the AI-generated content may vary depending on the topic and the quality of the training data used by the OpenAI API.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Styling and visual aesthetics were not the primary focus of this prototype project. However, it serves as a foundation upon which you can build and style a visually appealing blogging platform.

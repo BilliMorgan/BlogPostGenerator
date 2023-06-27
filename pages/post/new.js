@@ -4,13 +4,17 @@ import { AppLayout } from "../../components/AppLayout"
 import { useRouter } from "next/router"
 import { getAppProps } from "../../utils/getAppProps"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBrain } from "@fortawesome/free-solid-svg-icons"
+import {
+  faBrain,
+  faExclamationTriangle,
+} from "@fortawesome/free-solid-svg-icons"
 
 export default function NewPost(props) {
   const router = useRouter()
   const [topic, setTopic] = useState("")
   const [keywords, setKeyWords] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -28,13 +32,13 @@ export default function NewPost(props) {
       }
       const json = await response.json()
 
-      console.log("RESULT: ", json)
-
       if (json?.postId) {
         router.push(`/post/${json.postId}`)
       }
     } catch (error) {
       setIsLoading(false)
+      setIsError(true)
+      console.error(error)
     }
   }
   return (
@@ -43,9 +47,28 @@ export default function NewPost(props) {
         <div className="text-green-500 flex h-full animate-pulse w-full flex-col justify-center items-center">
           <FontAwesomeIcon className="text-8xl" icon={faBrain} />
           <h6 className="text-center">
-            Information is generated. <br />
-            It would take some time to display formatted data.
+            Information is generating... <br />
+            It would take some time to display formatted data. <br />
+            Please, don&apos;t close or reload the window.
           </h6>
+        </div>
+      )}
+      {isError && (
+        <div className="text-red-500 flex h-full  w-full flex-col justify-center items-center">
+          <FontAwesomeIcon
+            className="text-8xl animate-pulse"
+            icon={faExclamationTriangle}
+          />
+          <h6 className="text-center">
+            Server error is happened. <br />
+            please reload the page.
+          </h6>
+          <button
+            className="btn w-40 bg-red-500 hover:bg-red-300"
+            onClick={() => setIsError(false)}
+          >
+            Close
+          </button>
         </div>
       )}
       {!isLoading && (

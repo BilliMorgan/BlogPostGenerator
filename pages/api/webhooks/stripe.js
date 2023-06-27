@@ -26,7 +26,7 @@ const handler = async (req, res) => {
         endpointSecret,
       })
     } catch (e) {
-      console.log("ERROR: ", e)
+      console.error("ERROR: ", e)
     }
     switch (event.type) {
       case "payment_intent.succeeded": {
